@@ -37,40 +37,40 @@ packets = [packet1, packet2, packet3, packet4, packet5, packet6]
 
 monsters = {
     monster1 : {
-        "name" : "Spiteling",
-        "type" : "Water",
-        "weight" : "6.9",
-        "height" : "0.7"
+        "name": "Spiteling",
+        "type": "Water",
+        "weight": 6.9,
+        "height": 0.7
     },
     monster2: {
         "name": "Vampling",
         "type": "Fire",
-        "weight": "13.7",
-        "height": "1.3"
+        "weight": 13.7,
+        "height": 1.3
     },
     monster3: {
         "name": "Cinder",
         "type": "Ground",
-        "weight": "12.9",
-        "height": "1.1"
+        "weight": 12.9,
+        "height": 1.1
     },
     monster4: {
         "name": "Vextaur",
         "type": "Flying",
-        "weight": "5.4",
-        "height": "0.9"
+        "weight": 5.4,
+        "height": 0.9
     },
     monster5: {
         "name": "Wazow",
         "type": "Fighting",
-        "weight": "1.4",
-        "height": "1.0"
+        "weight": 1.4,
+        "height": 1.0
     },
     monster6: {
         "name": "Swirlip",
         "type": "Fairy",
-        "weight": "2.4",
-        "height": "0.5"
+        "weight": 2.4,
+        "height": 0.5
     }
 }
 
@@ -120,13 +120,13 @@ def getInformation(creature, img):
         for i in range(0, 6, 1):
             if img == packets[i][0]:
                 screen.blit(packets[i][1], (0, 0))
-        name = font_small.render("Imię zwierzątka:   "+creature["name"], True, blue)
+        name = font_small.render("Imię zwierzątka:   "+str(creature["name"]), True, blue)
         screen.blit(name, (450, 100))
-        type = font_small.render("Typ:   "+creature["type"], True, blue)
+        type = font_small.render("Typ:   "+str(creature["type"]), True, blue)
         screen.blit(type, (450, 200))
-        weight = font_small.render("Waga:   "+creature["weight"]+" kg", True, blue)
+        weight = font_small.render("Waga:   "+str(creature["weight"])+" kg", True, blue)
         screen.blit(weight, (450, 300))
-        height = font_small.render("Wzrost:   "+creature["height"]+" m", True, blue)
+        height = font_small.render("Wzrost:   "+str(creature["height"])+" m", True, blue)
         screen.blit(height, (450, 400))
         pygame.display.update()
 
