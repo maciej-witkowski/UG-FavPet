@@ -4,8 +4,8 @@ from pygame.locals import *
 
 pygame.init()
 
-display_width = 1000
-display_height = 600
+display_width = 1400
+display_height = 750
 
 monster_width = 150
 monster_height = 150
@@ -53,7 +53,8 @@ monster4 = pygame.image.load('monsters_icons_img/MONSTER4_game.png')
 monster5 = pygame.image.load('monsters_icons_img/MONSTER5_game.png')
 monster6 = pygame.image.load('monsters_icons_img/MONSTER6_game.png')
 
-screen_choose = pygame.display.set_mode((display_width, display_height))
+screen_choose = pygame.display.set_mode((1000, 600))
+
 pygame.display.set_caption("FavPet: KARMIENIE")
 clock = pygame.time.Clock()
 
@@ -81,7 +82,7 @@ def which_monster():
                     return monster6
 
 
-def monster(x, y, img):
+def monster(screen, x, y, img):
     screen.blit(img, (x, y))
 
 
@@ -105,11 +106,11 @@ def which_object(lista):
         return lista[7]
 
 
-def objects(x, y, img):
+def objects(screen, x, y, img):
     screen.blit(img, (x, y))
 
 
-def message_display(text, size, place_width, place_height, tone):
+def message_display(screen, text, size, place_width, place_height, tone):
     text_surface = size.render(text, True, tone)
     text_rect = text_surface.get_rect()
     text_rect.center = ((place_width // 2), (place_height // 2))
@@ -117,7 +118,7 @@ def message_display(text, size, place_width, place_height, tone):
     pygame.display.update()
 
 
-def button(text, x, y, w, h, ia_c, a_c, action=None):
+def button(screen, text, x, y, w, h, ia_c, a_c, action=None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
     if x + w > mouse[0] > x and y + h > mouse[1] > y:
@@ -126,21 +127,21 @@ def button(text, x, y, w, h, ia_c, a_c, action=None):
             action()
     else:
         pygame.draw.rect(screen, ia_c, (x, y, w, h))
-    message_display(text, font_small, (x + (w // 2)) * 2, (y + (h // 2)) * 2, white)
+    message_display(screen, text, font_small, (x + (w // 2)) * 2, (y + (h // 2)) * 2, white)
 
 
-def game_over(count, level):
+def game_over(screen, count, level):
     music(0, "stop", jazz_music)
     screen.fill(white)
-    message_display("PRZEGRAŁEŚ :(", font_big, display_width, display_height, blue)
+    message_display(screen, "PRZEGRAŁEŚ :(", font_big, display_width, display_height, blue)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quitgame()
-        button("Zagraj ponownie!", 350, 550, 300, 50, blue, blue_light, main)
-        button("Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
-        message_display("Twoje statystyki: ", font_medium, display_width, int(display_height // 4), blue_dark)
-        message_display("Zjedzone: " + str(count), font_medium, int(display_width * 1 / 3), display_height // 2,
+        button(screen, "Zagraj ponownie!", 350, 550, 300, 50, blue, blue_light, main)
+        button(screen, "Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
+        message_display(screen, "Twoje statystyki: ", font_medium, display_width, int(display_height // 4), blue_dark)
+        message_display(screen, "Zjedzone: " + str(count), font_medium, int(display_width * 1 / 3), display_height // 2,
                         blue_dark)
         text = font_medium.render("Poziom: " + str(level), True, blue_dark)
         screen.blit(text, (1050, 165))
@@ -153,28 +154,28 @@ def unpaused():
     pause = False
 
 
-def paused():
+def paused(screen):
     while pause:
         music(0, "stop", jazz_music)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quitgame()
-        message_display("Pauza...", font_big, display_width, display_height, blue)
-        button("Kontynuuj", 350, 550, 300, 50, blue, blue_light, unpaused)
-        button("Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
+        message_display(screen, "Pauza...", font_big, display_width, display_height, blue)
+        button(screen, "Kontynuuj", 350, 550, 300, 50, blue, blue_light, unpaused)
+        button(screen, "Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
         pygame.display.update()
 
 
-def play_or_end():
+def play_or_end(screen):
     while pause:
         music(0, "stop", jazz_music)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quitgame()
-        message_display("Nakarmiłeś FavPeta!", font_big, display_width, display_height // 2, blue)
-        message_display("Czy chcesz dalej kontynuować grę?", font_medium, display_width, display_height, blue_dark)
-        button("Kontynuuj", 350, 550, 300, 50, blue, blue_light, unpaused)
-        button("Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
+        message_display(screen, "Nakarmiłeś FavPeta!", font_big, display_width, display_height // 2, blue)
+        message_display(screen, "Czy chcesz dalej kontynuować grę?", font_medium, display_width, display_height, blue_dark)
+        button(screen, "Kontynuuj", 350, 550, 300, 50, blue, blue_light, unpaused)
+        button(screen, "Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
         pygame.display.update()
 
 
@@ -183,17 +184,17 @@ def quitgame():
     quit()
 
 
-def ate(count):
+def ate(screen, count):
     text = font_medium.render("Zjedzone: " + str(count), True, blue)
     screen.blit(text, (display_width - 260, 5))
 
 
-def levels(level):
+def levels(screen, level):
     text = font_medium.render("Poziom: " + str(level), True, blue)
     screen.blit(text, (5, 5))
 
 
-def hp(count):
+def hp(screen, count):
     screen.blit(HPbar_vertical, (5, display_height - 630))
     if count == 1:
         screen.blit(HPcover_vert, (5, 602))
@@ -215,7 +216,7 @@ def hp(count):
         screen.blit(HPcover_vert, (5, 170))
 
 
-def food_bar(count):
+def food_bar(screen, count):
     screen.blit(Bar, (display_width - 51, display_height - 655))
     if 4 < count < 10:
         screen.blit(Bar2, (display_width - 51, 645))
@@ -256,8 +257,11 @@ def music(channel, action, file):
         pygame.mixer.Channel(channel).stop()
 
 
-def main():
+def main(img):
     global pause
+    pause = False
+
+    screen_main = pygame.display.set_mode((display_width, display_height))
 
     music(0, "play", jazz_music)
 
@@ -287,20 +291,20 @@ def main():
                     x_change = 10
                 elif event.key == K_p:
                     pause = True
-                    paused()
+                    paused(screen_main)
             if event.type == KEYUP:
                 if event.key == K_a or event.key == K_d:
                     x_change = 0
 
-        screen.fill(white)
+        screen_main.fill(white)
 
-        monster(x_monster, y_monster, monsterImg)
-        objects(object_startx, object_starty, objectimg)
+        monster(screen_main, x_monster, y_monster, img)
+        objects(screen_main, object_startx, object_starty, objectimg)
 
-        levels(level)
-        hp(missed)
-        food_bar(catched)
-        ate(catched)
+        levels(screen_main, level)
+        hp(screen_main, missed)
+        food_bar(screen_main, catched)
+        ate(screen_main, catched)
 
         object_starty += object_speed
         x_monster += x_change
@@ -333,22 +337,17 @@ def main():
                 object_startx = random.randrange(0 + 55, display_width - object_width - 51)
                 if catched == 50:
                     pause = True
-                    play_or_end()
+                    play_or_end(screen_main)
 
         if missed < 0:
             missed = 0
 
         if missed > 9:
-            game_over(catched, level)
+            game_over(screen_main, catched, level)
 
         pygame.display.update()
         clock.tick(60)
 
 
-monsterImg = which_monster()
-display_width = 1400
-display_height = 750
-screen = pygame.display.set_mode((display_width, display_height))
-pause = False
-main()
-quitgame()
+
+# quitgame()

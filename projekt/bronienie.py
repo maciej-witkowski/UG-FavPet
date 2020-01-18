@@ -233,7 +233,7 @@ def quitgame():
     quit()
 
 
-def main():
+def main(img):
     """ USTAWIENIE DO POPRAWNEGO DZIAŁA FUNKCJI PAUZY """
     global pause
 
@@ -276,7 +276,7 @@ def main():
 
         ''' PRZYGOTOWANIE EKRANU '''
         screen.fill(white)
-        monster(x_monster, y_monster, monsterImg)
+        monster(x_monster, y_monster, img)
         kill_count(kill)
         hp(hit)
         levels(level)
@@ -404,5 +404,5 @@ display_width = 1400
 display_height = 750
 screen = pygame.display.set_mode((display_width, display_height))
 pause = False
-main()
+main(monsterImg)
 quitgame()
