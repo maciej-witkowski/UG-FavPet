@@ -226,7 +226,8 @@ def game_over(screen, img, kill, level):
         button(screen, img, "Zagraj ponownie!", 350, 550, 300, 50, blue, blue_light, "main")
         button(screen, img, "Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
         message_display(screen, "Twoje statystyki ", font_medium, display_width, int(display_height // 4), blue_dark)
-        message_display(screen, "Zestrzelone: "+str(kill), font_medium, int(display_width*1/3), display_height//2, blue_dark)
+        message_display(screen, "Zestrzelone: "+str(kill), font_medium, int(display_width*1/3), display_height//2,
+                        blue_dark)
         text = font_medium.render("Poziom: " + str(level), True, blue_dark)
         screen.blit(text, (1100, 165))
 
@@ -239,7 +240,6 @@ def quitgame():
 def main(img):
     """ USTAWIENIE DO POPRAWNEGO DZIAŁA FUNKCJI PAUZY """
     global pause
-    pause = False
 
     screen_main = pygame.display.set_mode((display_width, display_height))
 
@@ -405,3 +405,4 @@ def main(img):
         clock.tick(60)
 
 
+pause = False

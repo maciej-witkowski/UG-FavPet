@@ -1,5 +1,4 @@
 import pygame
-import random
 import karmienie
 import bronienie
 from pygame.locals import *
@@ -9,7 +8,7 @@ pygame.init()
 display_width = 1000
 display_height = 600
 
-TITLE_PAGE = pygame.image.load(('screens/pic01.png'))
+TITLE_PAGE = pygame.image.load('screens/pic01.png')
 wybor_postaci = pygame.image.load('screens/CHOOSEv1.png')
 menu_glowne = pygame.image.load('screens/szablon.png')
 
@@ -36,10 +35,8 @@ packet6 = [monster6, monster6_big]
 
 packets = [packet1, packet2, packet3, packet4, packet5, packet6]
 
-
-
 monsters = {
-    monster1 : {
+    monster1: {
         "name": "Spiteling",
         "type": "Water",
         "weight": 6.9,
@@ -87,8 +84,9 @@ blue_light = (145, 226, 245)
 blue_dark = (0, 0, 128)
 
 screen = pygame.display.set_mode((display_width, display_height))
-screen.blit(TITLE_PAGE, (0,0))
+screen.blit(TITLE_PAGE, (0, 0))
 pygame.display.set_caption("FavPet")
+
 
 def button(text, x, y, w, h, ia_c, a_c, action=None):
     mouse = pygame.mouse.get_pos()
@@ -104,12 +102,14 @@ def button(text, x, y, w, h, ia_c, a_c, action=None):
         pygame.draw.rect(screen, ia_c, (x, y, w, h))
     message_display(text, font_small, (x+(w//2)) * 2, (y+(h//2)) * 2, white)
 
+
 def message_display(text, size, place_width, place_height, tone):
     text_surface = size.render(text, True, tone)
     text_rect = text_surface.get_rect()
     text_rect.center = ((place_width//2), (place_height//2))
     screen.blit(text_surface, text_rect)
     pygame.display.update()
+
 
 def which_monster():
     while True:
@@ -134,9 +134,9 @@ def which_monster():
                     return packets[5][0]
 
 
-def getInformation(creature, img):
+def get_information(creature, img):
     while True:
-        screen.blit(menu_glowne, (0,0))
+        screen.blit(menu_glowne, (0, 0))
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -148,8 +148,8 @@ def getInformation(creature, img):
         screen.blit(statystyki, (600, 20))
         name = font_small.render("Imię zwierzątka:   "+str(creature["name"]), True, blue_dark)
         screen.blit(name, (450, 100))
-        type = font_small.render("Typ:   "+str(creature["type"]), True, blue_dark)
-        screen.blit(type, (450, 150))
+        typ = font_small.render("Typ:   "+str(creature["type"]), True, blue_dark)
+        screen.blit(typ, (450, 150))
         weight = font_small.render("Waga:   "+str(creature["weight"])+" kg", True, blue_dark)
         screen.blit(weight, (450, 200))
         height = font_small.render("Wzrost:   "+str(creature["height"])+" m", True, blue_dark)
@@ -170,9 +170,10 @@ def intro():
                 if event.key == K_SPACE:
                     monster = which_monster()
                     return monster
-        screen.blit(TITLE_PAGE, (0,0))
+        screen.blit(TITLE_PAGE, (0, 0))
         message_display("Kliknij SPACE, aby kontynuować...", font_medium, 1080, 730, blue_dark)
         pygame.display.update()
 
+
 character = intro()
-getInformation(monsters[character], character)
+get_information(monsters[character], character)

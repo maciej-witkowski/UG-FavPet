@@ -176,7 +176,8 @@ def play_or_end(screen, img):
             if event.type == pygame.QUIT:
                 quitgame()
         message_display(screen, "Nakarmiłeś FavPeta!", font_big, display_width, display_height // 2, blue)
-        message_display(screen, "Czy chcesz dalej kontynuować grę?", font_medium, display_width, display_height, blue_dark)
+        message_display(screen, "Czy chcesz dalej kontynuować grę?", font_medium, display_width, display_height,
+                        blue_dark)
         button(screen, img, "Kontynuuj", 350, 550, 300, 50, blue, blue_light, unpaused)
         button(screen, img, "Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
         pygame.display.update()
@@ -262,7 +263,6 @@ def music(channel, action, file):
 
 def main(img):
     global pause
-    pause = False
 
     screen_main = pygame.display.set_mode((display_width, display_height))
 
@@ -351,3 +351,5 @@ def main(img):
         pygame.display.update()
         clock.tick(60)
 
+
+pause = False
