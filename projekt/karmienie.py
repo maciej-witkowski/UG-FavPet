@@ -44,7 +44,7 @@ food6 = pygame.image.load('food_img/watermelon.png')
 food7 = pygame.image.load('food_img/special1.png')
 food8 = pygame.image.load('food_img/poo.png')
 
-food = (food1, food2, food3, food4, food5, food6, food7, food8)
+food = [food1, food2, food3, food4, food5, food6, food7, food8]
 
 monster1 = pygame.image.load('monsters_icons_img/MONSTER1_game.png')
 monster2 = pygame.image.load('monsters_icons_img/MONSTER2_game.png')
@@ -57,29 +57,6 @@ screen_choose = pygame.display.set_mode((1000, 600))
 
 pygame.display.set_caption("FavPet: KARMIENIE")
 clock = pygame.time.Clock()
-
-
-def which_monster():
-    while True:
-        screen_choose.blit(wybor_postaci, (0, 0))
-        pygame.display.update()
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                quit()
-            if event.type == KEYDOWN:
-                if event.key == K_1:
-                    return monster1
-                elif event.key == K_2:
-                    return monster2
-                elif event.key == K_3:
-                    return monster3
-                elif event.key == K_4:
-                    return monster4
-                elif event.key == K_5:
-                    return monster5
-                elif event.key == K_6:
-                    return monster6
 
 
 def monster(screen, x, y, img):
@@ -138,9 +115,6 @@ def game_over(screen, img, count, level):
     screen.fill(white)
     message_display(screen, "PRZEGRAŁEŚ :(", font_big, display_width, display_height, blue)
     while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                quitgame()
         button(screen, img, "Zagraj ponownie!", 350, 550, 300, 50, blue, blue_light, "main")
         button(screen, img, "Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
         message_display(screen, "Twoje statystyki: ", font_medium, display_width, int(display_height // 4), blue_dark)
@@ -160,9 +134,6 @@ def unpaused():
 def paused(screen, img):
     while pause:
         music(0, "stop", jazz_music)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                quitgame()
         message_display(screen, "Pauza...", font_big, display_width, display_height, blue)
         button(screen, img, "Kontynuuj", 350, 550, 300, 50, blue, blue_light, unpaused)
         button(screen, img, "Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
@@ -172,9 +143,6 @@ def paused(screen, img):
 def play_or_end(screen, img):
     while pause:
         music(0, "stop", jazz_music)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                quitgame()
         message_display(screen, "Nakarmiłeś FavPeta!", font_big, display_width, display_height // 2, blue)
         message_display(screen, "Czy chcesz dalej kontynuować grę?", font_medium, display_width, display_height,
                         blue_dark)

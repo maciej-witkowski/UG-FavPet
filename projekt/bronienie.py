@@ -50,29 +50,6 @@ pygame.display.set_caption("FavPet: OBRONA")
 clock = pygame.time.Clock()
 
 
-def which_monster():
-    while True:
-        choose_screen.blit(wybor_postaci, (0, 0))
-        pygame.display.update()
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                quit()
-            if event.type == KEYDOWN:
-                if event.key == K_1:
-                    return monster1
-                elif event.key == K_2:
-                    return monster2
-                elif event.key == K_3:
-                    return monster3
-                elif event.key == K_4:
-                    return monster4
-                elif event.key == K_5:
-                    return monster5
-                elif event.key == K_6:
-                    return monster6
-
-
 def monster(screen, x, y, img):
     screen.blit(img, (x, y))
 
@@ -207,9 +184,6 @@ def unpaused():
 def paused(screen, img):
     while pause:
         music(0, "stop", main_music)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                quitgame()
         message_display(screen, "Pauza...", font_big, display_width, display_height - 200, blue)
         button(screen, img, "Kontynuuj", 350, 550, 300, 50, blue, blue_light, unpaused)
         button(screen, img, "Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
@@ -220,9 +194,6 @@ def game_over(screen, img, kill, level):
     screen.fill(white)
     message_display(screen, "PRZEGRAŁEŚ :(", font_big, display_width, display_height, blue)
     while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                quitgame()
         button(screen, img, "Zagraj ponownie!", 350, 550, 300, 50, blue, blue_light, "main")
         button(screen, img, "Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
         message_display(screen, "Twoje statystyki ", font_medium, display_width, int(display_height // 4), blue_dark)
