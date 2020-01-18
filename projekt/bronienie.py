@@ -3,8 +3,8 @@ import random
 from pygame.locals import *
 pygame.init()
 
-display_width = 1000
-display_height = 600
+display_width = 1400
+display_height = 750
 
 monster_width = 150
 monster_height = 150
@@ -44,7 +44,7 @@ monster4 = pygame.image.load('monsters_icons_img/MONSTER4_game.png')
 monster5 = pygame.image.load('monsters_icons_img/MONSTER5_game.png')
 monster6 = pygame.image.load('monsters_icons_img/MONSTER6_game.png')
 
-choose_screen = pygame.display.set_mode((display_width, display_height))
+choose_screen = pygame.display.set_mode((1000, 600))
 pygame.display.set_caption("FavPet: OBRONA")
 
 clock = pygame.time.Clock()
@@ -73,11 +73,11 @@ def which_monster():
                     return monster6
 
 
-def monster(x, y, img):
+def monster(screen, x, y, img):
     screen.blit(img, (x, y))
 
 
-def spawn_enemy(place, x, y):
+def spawn_enemy(screen, place, x, y):
     if place == 0:
         screen.blit(enemies[2], (x, y))
     elif place == 1:
@@ -103,12 +103,12 @@ def reset_enemy_pos(pos_enemies, which):
         pos_enemies[3][1] = 675
 
 
-def kill_count(count):
+def kill_count(screen, count):
     text = font_medium.render("Zestrzelone: "+str(count), True, blue)
     screen.blit(text, (display_width // 2, 700))
 
 
-def hp(count):
+def hp(screen, count):
     screen.blit(hp_bar, (435, 10))
     if count == 1:
         screen.blit(hp_cover, (919, 0))
@@ -130,7 +130,7 @@ def hp(count):
         screen.blit(hp_cover, (487, 0))
 
 
-def levels(count):
+def levels(screen, count):
     text = font_medium.render("Poziom: "+str(count), True, blue)
     screen.blit(text, (display_width // 4 + 50, 700))
 
@@ -168,7 +168,7 @@ def set_enemy_speed(level):
         return x, y
 
 
-def message_display(text, size, place_width, place_height, tone):
+def message_display(screen, text, size, place_width, place_height, tone):
     text_surface = size.render(text, True, tone)
     text_rect = text_surface.get_rect()
     text_rect.center = ((place_width//2), (place_height//2))
@@ -176,16 +176,19 @@ def message_display(text, size, place_width, place_height, tone):
     pygame.display.update()
 
 
-def button(text, x, y, w, h, ia_c, a_c, action=None):
+def button(screen, img, text, x, y, w, h, ia_c, a_c, action=None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
     if x+w > mouse[0] > x and y+h > mouse[1] > y:
         pygame.draw.rect(screen, a_c, (x, y, w, h))
         if click[0] == 1 and action is not None:
-            action()
+            if action == "main":
+                main(img)
+            else:
+                action()
     else:
         pygame.draw.rect(screen, ia_c, (x, y, w, h))
-    message_display(text, font_small, (x+(w//2)) * 2, (y+(h//2)) * 2, white)
+    message_display(screen, text, font_small, (x+(w//2)) * 2, (y+(h//2)) * 2, white)
 
 
 def music(channel, action, file):
@@ -201,29 +204,29 @@ def unpaused():
     pause = False
 
 
-def paused():
+def paused(screen, img):
     while pause:
         music(0, "stop", main_music)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quitgame()
-        message_display("Pauza...", font_big, display_width, display_height - 200, blue)
-        button("Kontynuuj", 350, 550, 300, 50, blue, blue_light, unpaused)
-        button("Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
+        message_display(screen, "Pauza...", font_big, display_width, display_height - 200, blue)
+        button(screen, img, "Kontynuuj", 350, 550, 300, 50, blue, blue_light, unpaused)
+        button(screen, img, "Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
 
 
-def game_over(kill, level):
+def game_over(screen, img, kill, level):
     music(0, "stop", main_music)
     screen.fill(white)
-    message_display("PRZEGRAŁEŚ :(", font_big, display_width, display_height, blue)
+    message_display(screen, "PRZEGRAŁEŚ :(", font_big, display_width, display_height, blue)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quitgame()
-        button("Zagraj ponownie!", 350, 550, 300, 50, blue, blue_light, main)
-        button("Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
-        message_display("Twoje statystyki ", font_medium, display_width, int(display_height // 4), blue_dark)
-        message_display("Zestrzelone: "+str(kill), font_medium, int(display_width*1/3), display_height//2, blue_dark)
+        button(screen, img, "Zagraj ponownie!", 350, 550, 300, 50, blue, blue_light, "main")
+        button(screen, img, "Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
+        message_display(screen, "Twoje statystyki ", font_medium, display_width, int(display_height // 4), blue_dark)
+        message_display(screen, "Zestrzelone: "+str(kill), font_medium, int(display_width*1/3), display_height//2, blue_dark)
         text = font_medium.render("Poziom: " + str(level), True, blue_dark)
         screen.blit(text, (1100, 165))
 
@@ -236,6 +239,9 @@ def quitgame():
 def main(img):
     """ USTAWIENIE DO POPRAWNEGO DZIAŁA FUNKCJI PAUZY """
     global pause
+    pause = False
+
+    screen_main = pygame.display.set_mode((display_width, display_height))
 
     ''' ROZPOCZĘCIE GRANIA MUZYKI '''
     music(0, "play", main_music)
@@ -272,15 +278,15 @@ def main(img):
             if event.type == KEYDOWN:
                 if event.key == K_p:
                     pause = True
-                    paused()
+                    paused(screen_main, img)
 
         ''' PRZYGOTOWANIE EKRANU '''
-        screen.fill(white)
-        monster(x_monster, y_monster, img)
-        kill_count(kill)
-        hp(hit)
-        levels(level)
-        spawn_enemy(enemy, pos_enemies[enemy][0], pos_enemies[enemy][1])
+        screen_main.fill(white)
+        monster(screen_main, x_monster, y_monster, img)
+        kill_count(screen_main, kill)
+        hp(screen_main, hit)
+        levels(screen_main, level)
+        spawn_enemy(screen_main, enemy, pos_enemies[enemy][0], pos_enemies[enemy][1])
 
         ''' ZMIANA POZYCJI WROGÓW '''
         if enemy == 0:
@@ -393,16 +399,9 @@ def main(img):
 
         ''' GDY WYCZERPIEMY LIMIT ŻYĆ GRA SIĘ KOŃCZY '''
         if hit > 9:
-            game_over(kill, level)
+            game_over(screen_main, img, kill, level)
 
         pygame.display.update()
         clock.tick(60)
 
 
-monsterImg = which_monster()
-display_width = 1400
-display_height = 750
-screen = pygame.display.set_mode((display_width, display_height))
-pause = False
-main(monsterImg)
-quitgame()

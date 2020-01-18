@@ -118,19 +118,22 @@ def message_display(screen, text, size, place_width, place_height, tone):
     pygame.display.update()
 
 
-def button(screen, text, x, y, w, h, ia_c, a_c, action=None):
+def button(screen, img, text, x, y, w, h, ia_c, a_c, action=None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
     if x + w > mouse[0] > x and y + h > mouse[1] > y:
         pygame.draw.rect(screen, a_c, (x, y, w, h))
         if click[0] == 1 and action is not None:
-            action()
+            if action == "main":
+                main(img)
+            else:
+                action()
     else:
         pygame.draw.rect(screen, ia_c, (x, y, w, h))
     message_display(screen, text, font_small, (x + (w // 2)) * 2, (y + (h // 2)) * 2, white)
 
 
-def game_over(screen, count, level):
+def game_over(screen, img, count, level):
     music(0, "stop", jazz_music)
     screen.fill(white)
     message_display(screen, "PRZEGRAŁEŚ :(", font_big, display_width, display_height, blue)
@@ -138,8 +141,8 @@ def game_over(screen, count, level):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quitgame()
-        button(screen, "Zagraj ponownie!", 350, 550, 300, 50, blue, blue_light, main)
-        button(screen, "Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
+        button(screen, img, "Zagraj ponownie!", 350, 550, 300, 50, blue, blue_light, "main")
+        button(screen, img, "Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
         message_display(screen, "Twoje statystyki: ", font_medium, display_width, int(display_height // 4), blue_dark)
         message_display(screen, "Zjedzone: " + str(count), font_medium, int(display_width * 1 / 3), display_height // 2,
                         blue_dark)
@@ -154,19 +157,19 @@ def unpaused():
     pause = False
 
 
-def paused(screen):
+def paused(screen, img):
     while pause:
         music(0, "stop", jazz_music)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quitgame()
         message_display(screen, "Pauza...", font_big, display_width, display_height, blue)
-        button(screen, "Kontynuuj", 350, 550, 300, 50, blue, blue_light, unpaused)
-        button(screen, "Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
+        button(screen, img, "Kontynuuj", 350, 550, 300, 50, blue, blue_light, unpaused)
+        button(screen, img, "Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
         pygame.display.update()
 
 
-def play_or_end(screen):
+def play_or_end(screen, img):
     while pause:
         music(0, "stop", jazz_music)
         for event in pygame.event.get():
@@ -174,8 +177,8 @@ def play_or_end(screen):
                 quitgame()
         message_display(screen, "Nakarmiłeś FavPeta!", font_big, display_width, display_height // 2, blue)
         message_display(screen, "Czy chcesz dalej kontynuować grę?", font_medium, display_width, display_height, blue_dark)
-        button(screen, "Kontynuuj", 350, 550, 300, 50, blue, blue_light, unpaused)
-        button(screen, "Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
+        button(screen, img, "Kontynuuj", 350, 550, 300, 50, blue, blue_light, unpaused)
+        button(screen, img, "Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
         pygame.display.update()
 
 
@@ -291,7 +294,7 @@ def main(img):
                     x_change = 10
                 elif event.key == K_p:
                     pause = True
-                    paused(screen_main)
+                    paused(screen_main, img)
             if event.type == KEYUP:
                 if event.key == K_a or event.key == K_d:
                     x_change = 0
@@ -337,17 +340,14 @@ def main(img):
                 object_startx = random.randrange(0 + 55, display_width - object_width - 51)
                 if catched == 50:
                     pause = True
-                    play_or_end(screen_main)
+                    play_or_end(screen_main, img)
 
         if missed < 0:
             missed = 0
 
         if missed > 9:
-            game_over(screen_main, catched, level)
+            game_over(screen_main, img, catched, level)
 
         pygame.display.update()
         clock.tick(60)
 
-
-
-# quitgame()

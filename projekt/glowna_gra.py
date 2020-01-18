@@ -1,6 +1,7 @@
 import pygame
 import random
 import karmienie
+import bronienie
 from pygame.locals import *
 
 pygame.init()
@@ -97,8 +98,8 @@ def button(text, x, y, w, h, ia_c, a_c, action=None):
         if click[0] == 1 and action is not None:
             if action == "karmienie":
                 karmienie.main(character)
-            # elif action == "obrona":
-            #     bronienie.main(character)
+            elif action == "obrona":
+                bronienie.main(character)
     else:
         pygame.draw.rect(screen, ia_c, (x, y, w, h))
     message_display(text, font_small, (x+(w//2)) * 2, (y+(h//2)) * 2, white)
@@ -155,8 +156,8 @@ def getInformation(creature, img):
         screen.blit(height, (450, 250))
         aktywnosci = font_medium.render("Aktywności: ", True, blue_dark)
         screen.blit(aktywnosci, (590, 340))
-        button("Karmienie",450, 450, 200, 50, blue, blue_light, "karmienie")
-        pygame.display.update()
+        button("Karmienie", 450, 450, 200, 50, blue, blue_dark, "karmienie")
+        button("Obrona", 750, 450, 200, 50, blue, blue_dark, "obrona")
 
 
 def intro():
