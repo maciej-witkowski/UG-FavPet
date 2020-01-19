@@ -183,6 +183,10 @@ def unpaused():
 
 def paused(screen, img):
     while pause:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                quit()
         music(0, "stop", main_music)
         message_display(screen, "Pauza...", font_big, display_width, display_height - 200, blue)
         button(screen, img, "Kontynuuj", 350, 550, 300, 50, blue, blue_light, unpaused)
@@ -194,6 +198,10 @@ def game_over(screen, img, kill, level):
     screen.fill(white)
     message_display(screen, "PRZEGRAŁEŚ :(", font_big, display_width, display_height, blue)
     while True:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                quit()
         button(screen, img, "Zagraj ponownie!", 350, 550, 300, 50, blue, blue_light, "main")
         button(screen, img, "Zakończ.", 750, 550, 300, 50, blue, blue_light, quitgame)
         message_display(screen, "Twoje statystyki ", font_medium, display_width, int(display_height // 4), blue_dark)
