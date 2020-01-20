@@ -119,7 +119,6 @@ def message_display(text, size, place_width, place_height, tone):
     text_rect = text_surface.get_rect()
     text_rect.center = ((place_width//2), (place_height//2))
     screen.blit(text_surface, text_rect)
-    pygame.display.update()
 
 
 def unpaused_bronienie():
@@ -157,6 +156,7 @@ def paused_bronienie():
         message_display("Pauza...", font_big, bronienie.display_width, bronienie.display_height - 200, blue)
         button("Kontynuuj", 350, 550, 300, 50, blue, blue_light, unpaused_bronienie)
         button("Wróć do menu...", 750, 550, 300, 50, blue, blue_light, "menu")
+        pygame.display.update()
 
 
 def game_over_karmienie(count, level):
@@ -196,6 +196,7 @@ def game_over_bronienie(kill, level):
                         blue_dark)
         text = font_medium.render("Poziom: " + str(level), True, blue_dark)
         screen_game.blit(text, (1100, 165))
+        pygame.display.update()
 
 
 def play_or_end():
