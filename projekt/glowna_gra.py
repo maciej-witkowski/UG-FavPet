@@ -106,12 +106,20 @@ def button(text, x, y, w, h, ia_c, a_c, action=None):
             elif action == "obrona":
                 main_bronienie(character)
             elif action == "menu":
-                get_information(monsters[character], character)
+                menu(monsters[character], character)
             else:
                 action()
     else:
         pygame.draw.rect(screen, ia_c, (x, y, w, h))
     message_display(text, font_small, (x+(w//2)) * 2, (y+(h//2)) * 2, white)
+
+
+def message_display(text, size, place_width, place_height, tone):
+    text_surface = size.render(text, True, tone)
+    text_rect = text_surface.get_rect()
+    text_rect.center = ((place_width//2), (place_height//2))
+    screen.blit(text_surface, text_rect)
+    pygame.display.update()
 
 
 def unpaused_bronienie():
@@ -135,7 +143,7 @@ def paused_karmienie():
         karmienie.music(0, "stop", karmienie.jazz_music)
         message_display("Pauza...", font_big, karmienie.display_width, karmienie.display_height, blue)
         button("Kontynuuj", 350, 550, 300, 50, blue, blue_light, unpaused_karmienie)
-        button("Zakończ.", 750, 550, 300, 50, blue, blue_light, "menu")
+        button("Wróć do menu...", 750, 550, 300, 50, blue, blue_light, "menu")
         pygame.display.update()
 
 
@@ -148,7 +156,7 @@ def paused_bronienie():
         bronienie.music(0, "stop", bronienie.main_music)
         message_display("Pauza...", font_big, bronienie.display_width, bronienie.display_height - 200, blue)
         button("Kontynuuj", 350, 550, 300, 50, blue, blue_light, unpaused_bronienie)
-        button("Zakończ.", 750, 550, 300, 50, blue, blue_light, "menu")
+        button("Wróć do menu...", 750, 550, 300, 50, blue, blue_light, "menu")
 
 
 def game_over_karmienie(count, level):
@@ -160,8 +168,9 @@ def game_over_karmienie(count, level):
             if event.type == QUIT:
                 pygame.quit()
                 quit()
-        button("Zagraj ponownie!", 350, 550, 300, 50, blue, blue_light, "karmienie")
-        button("Zakończ.", 750, 550, 300, 50, blue, blue_light, "menu")
+        button("Zagraj ponownie!", 150, 550, 300, 50, blue, blue_light, "karmienie")
+        button("Wróć do menu...", 500, 550, 300, 50, blue, blue_light, "menu")
+        button("Wyjdź.", 850, 550, 300, 50, blue, blue_light, quitgame)
         message_display("Twoje statystyki: ", font_medium, display_width_game, int(display_height_game // 4), blue_dark)
         message_display("Zjedzone: " + str(count), font_medium, int(display_width_game * 1 / 3),
                         display_height_game // 2, blue_dark)
@@ -179,8 +188,9 @@ def game_over_bronienie(kill, level):
             if event.type == QUIT:
                 pygame.quit()
                 quit()
-        button("Zagraj ponownie!", 350, 550, 300, 50, blue, blue_light, "obrona")
-        button("Zakończ.", 750, 550, 300, 50, blue, blue_light, "menu")
+        button("Zagraj ponownie!", 150, 550, 300, 50, blue, blue_light, "obrona")
+        button("Wróć do menu...", 500, 550, 300, 50, blue, blue_light, "menu")
+        button("Wyjdź.", 850, 550, 300, 50, blue, blue_light, quitgame)
         message_display("Twoje statystyki ", font_medium, display_width_game, int(display_height_game // 4), blue_dark)
         message_display("Zestrzelone: "+str(kill), font_medium, int(display_width_game*1/3), display_height_game//2,
                         blue_dark)
@@ -199,21 +209,13 @@ def play_or_end():
         message_display("Czy chcesz dalej kontynuować grę?", font_medium, display_width_game, display_height_game,
                         blue_dark)
         button("Kontynuuj", 350, 550, 300, 50, blue, blue_light, unpaused_karmienie)
-        button("Zakończ.", 750, 550, 300, 50, blue, blue_light, "menu")
+        button("Wróć do menu....", 750, 550, 300, 50, blue, blue_light, "menu")
         pygame.display.update()
 
 
 def quitgame():
     pygame.quit()
     quit()
-
-
-def message_display(text, size, place_width, place_height, tone):
-    text_surface = size.render(text, True, tone)
-    text_rect = text_surface.get_rect()
-    text_rect.center = ((place_width//2), (place_height//2))
-    screen.blit(text_surface, text_rect)
-    pygame.display.update()
 
 
 def which_monster():
@@ -239,7 +241,7 @@ def which_monster():
                     return packets[5][0]
 
 
-def get_information(creature, img):
+def menu(creature, img):
     while True:
         pygame.display.set_mode((display_width, display_height))
         screen.blit(menu_glowne, (0, 0))
@@ -262,8 +264,10 @@ def get_information(creature, img):
         screen.blit(height, (450, 250))
         aktywnosci = font_medium.render("Aktywności: ", True, blue_dark)
         screen.blit(aktywnosci, (590, 340))
-        button("Karmienie", 450, 450, 200, 50, blue, blue_dark, "karmienie")
-        button("Obrona", 750, 450, 200, 50, blue, blue_dark, "obrona")
+        button("Karmienie", 450, 420, 200, 50, blue, blue_dark, "karmienie")
+        button("Obrona", 750, 420, 200, 50, blue, blue_dark, "obrona")
+        button("Wyjdź", 600, 500, 200, 50, blue, blue_dark, quitgame)
+        pygame.display.update()
 
 
 def intro():
@@ -282,26 +286,34 @@ def intro():
 
 
 def main_karmienie(img):
+    """ USTAWIENIE DO POPRAWNEGO DZIAŁANIA FUNKCJI PAUZY """
     global pause
 
+    """ USTAWIENIE DLA LEPSZEGO KOMFORTU GRY """
     pygame.display.set_mode((display_width_game, display_height_game))
 
+    """ ODPALENIE GŁÓWNEGO MOTYWU MUZYCZNEGO """
     karmienie.music(0, "play", karmienie.jazz_music)
 
+    """ WYJŚCIOWE USTAWIENIA POZYCJI STWORKA """
     x_monster = int(display_width_game * 0.43)
     y_monster = int(display_height_game * 0.80)
 
+    """ PARAMETR DO STEROWANIA POTWORKIEM """
     x_change = 0
 
+    """ LOSOWE USTAWIENIE PIERWSZEGO ELEMENTU """
     object_startx = random.randrange(0 + 55, display_width_game - karmienie.object_width - 51)
     object_starty = -display_height_game
     object_speed = 4
     objectimg = karmienie.which_object(karmienie.food)
 
+    """ PARAMETRY DO ZMIANY STATYSTYK W TRAKCIE GRY """
     catched = 0
     missed = 0
     level = 1
 
+    """ GŁÓWNA PĘTLA GRY """
     while True:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -319,22 +331,24 @@ def main_karmienie(img):
                 if event.key == K_a or event.key == K_d:
                     x_change = 0
 
+        """ WYŚWIETLENIE NA EKRAN WSZYSTKICH POTRZEBNYCH STRUKTUR """
         screen_game.fill(white)
-
         karmienie.monster(screen_game, x_monster, y_monster, img)
         karmienie.objects(screen_game, object_startx, object_starty, objectimg)
-
         karmienie.levels(screen_game, level)
         karmienie.hp(screen_game, missed)
         karmienie.food_bar(screen_game, catched)
         karmienie.ate(screen_game, catched)
 
+        """ ZMIANA POZYCJI STWORKA I ELEMENTÓW """
         object_starty += object_speed
         x_monster += x_change
 
+        """ WARUNEK DLA WYJŚCIA POZA EKRAN """
         if x_monster > display_width_game - karmienie.monster_width - 51 or x_monster < 0 + 55:
             x_monster -= x_change
 
+        """ WARUNEK DLA WYJŚCIA ELEMENTU POZA EKRAN(NIE ZŁAPANIE ELEMENTU) """
         if object_starty > display_height_game - karmienie.object_height:
             if objectimg != karmienie.food[6] and objectimg != karmienie.food[7]:
                 missed += 1
@@ -342,6 +356,7 @@ def main_karmienie(img):
             object_starty = 0
             object_startx = random.randrange(0 + 55, display_width_game - karmienie.object_width - 51)
 
+        """ WARUNEK DLA ZETKNIĘCIA SIĘ ELEMENTU ZE STWORKIEM(ZŁAPANIE ELEMENTU) """
         if object_starty + karmienie.object_height > y_monster:
             if x_monster + karmienie.monster_width > object_startx and x_monster < object_startx + \
                     karmienie.object_width:
@@ -359,13 +374,17 @@ def main_karmienie(img):
                 objectimg = karmienie.which_object(karmienie.food)
                 object_starty = 0
                 object_startx = random.randrange(0 + 55, display_width_game - display_height_game - 51)
+
+                """ WARUNEK DLA WYPEŁNIENIA PASKA GŁODU """
                 if catched == 50:
                     pause = True
                     play_or_end()
 
+        """ WARUNEK ZABEZPIECZAJĄCY ZMIENNĄ DLA NIEZŁAPANYCH ELEMENTÓW PRZED USTAWIENIEM NA WARTOŚĆ < 0 """
         if missed < 0:
             missed = 0
 
+        """ WARUNEK DLA UTRATY WSZYSTKICH ŻYĆ """
         if missed > 9:
             game_over_karmienie(catched, level)
 
@@ -374,9 +393,10 @@ def main_karmienie(img):
 
 
 def main_bronienie(img):
-    """ USTAWIENIE DO POPRAWNEGO DZIAŁA FUNKCJI PAUZY """
+    """ USTAWIENIE DO POPRAWNEGO DZIAŁANIA FUNKCJI PAUZY """
     global pause
 
+    """ USTAWIENIE DLA LEPSZEGO KOMFORTU GRY """
     pygame.display.set_mode((display_width_game, display_height_game))
 
     ''' ROZPOCZĘCIE GRANIA MUZYKI '''
@@ -476,7 +496,7 @@ def main_bronienie(img):
             hit += 1
             x_change_e, y_change_e = bronienie.set_enemy_speed(1)
 
-        ''' ZABIJANIE POTWORÓW I WSZYSTKIE AKCJI Z TYM ZWIĄZANE, CZYLI:
+        ''' ZABIJANIE POTWORÓW I WSZYSTKIE AKCJE Z TYM ZWIĄZANE, CZYLI:
             - RESETOWANIE POZYCI PO ZABÓJSTWIE,
             - LOSOWANIE POZYCJI KOLEJNEGO WROGA,
             - ZWIĘKSZANIE LICZNIKA ZABÓJSTW,
@@ -548,4 +568,4 @@ def main_bronienie(img):
 pause = False
 
 character = intro()
-get_information(monsters[character], character)
+menu(monsters[character], character)
