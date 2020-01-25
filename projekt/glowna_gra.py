@@ -16,61 +16,81 @@ intro_screen = pygame.image.load('screens/pic01.png')
 wybor_postaci = pygame.image.load('screens/CHOOSEv1.png')
 menu_glowne = pygame.image.load('screens/szablon.png')
 
-monster1 = pygame.image.load('monsters_icons_img/MONSTER1_game.png')
-monster2 = pygame.image.load('monsters_icons_img/MONSTER2_game.png')
-monster3 = pygame.image.load('monsters_icons_img/MONSTER3_game.png')
-monster4 = pygame.image.load('monsters_icons_img/MONSTER4_game.png')
-monster5 = pygame.image.load('monsters_icons_img/MONSTER5_game.png')
-monster6 = pygame.image.load('monsters_icons_img/MONSTER6_game.png')
+monsters = []
 
-monster1_big = pygame.image.load('monsters_img/MONSTER1_edit.png')
-monster2_big = pygame.image.load('monsters_img/MONSTER2_edit.png')
-monster3_big = pygame.image.load('monsters_img/MONSTER3_edit.png')
-monster4_big = pygame.image.load('monsters_img/MONSTER4_edit.png')
-monster5_big = pygame.image.load('monsters_img/MONSTER5_edit.png')
-monster6_big = pygame.image.load('monsters_img/MONSTER6_edit.png')
+for i in range(1, 7, 1):
+    pic = pygame.image.load('monsters_icons_img/MONSTER'+str(i)+'_game.png')
+    monsters.append(pic)
 
-packet1 = [monster1, monster1_big]
-packet2 = [monster2, monster2_big]
-packet3 = [monster3, monster3_big]
-packet4 = [monster4, monster4_big]
-packet5 = [monster5, monster5_big]
-packet6 = [monster6, monster6_big]
+# monster1 = pygame.image.load('monsters_icons_img/MONSTER1_game.png')
+# monster2 = pygame.image.load('monsters_icons_img/MONSTER2_game.png')
+# monster3 = pygame.image.load('monsters_icons_img/MONSTER3_game.png')
+# monster4 = pygame.image.load('monsters_icons_img/MONSTER4_game.png')
+# monster5 = pygame.image.load('monsters_icons_img/MONSTER5_game.png')
+# monster6 = pygame.image.load('monsters_icons_img/MONSTER6_game.png')
+
+monsters_big = []
+
+for i in range(1, 7, 1):
+    pic_big = pygame.image.load('monsters_img/MONSTER'+str(i)+'_edit.png')
+    monsters_big.append(pic_big)
+
+# monster_big1 = pygame.image.load('monsters_img/MONSTER1_edit.png')
+# monster_big2 = pygame.image.load('monsters_img/MONSTER2_edit.png')
+# monster_big3 = pygame.image.load('monsters_img/MONSTER3_edit.png')
+# monster_big4 = pygame.image.load('monsters_img/MONSTER4_edit.png')
+# monster_big5 = pygame.image.load('monsters_img/MONSTER5_edit.png')
+# monster_big6 = pygame.image.load('monsters_img/MONSTER6_edit.png')
+
+packet1 = [monsters[0], monsters_big[0]]
+packet2 = [monsters[1], monsters_big[1]]
+packet3 = [monsters[2], monsters_big[2]]
+packet4 = [monsters[3], monsters_big[3]]
+packet5 = [monsters[4], monsters_big[4]]
+packet6 = [monsters[5], monsters_big[5]]
+
+# packet1 = [monster1, monster_big1]
+# packet2 = [monster2, monster_big2]
+# packet3 = [monster3, monster_big3]
+# packet4 = [monster4, monster_big4]
+# packet5 = [monster5, monster_big5]
+# packet6 = [monster6, monster_big6]
+
 
 packets = [packet1, packet2, packet3, packet4, packet5, packet6]
 
 monsters = {
-    monster1: {
+    monsters[0]: {
         "name": "Spiteling",
         "type": "Water",
         "weight": 6.9,
         "height": 0.7
     },
-    monster2: {
+    monsters[1]: {
         "name": "Vampling",
         "type": "Fire",
         "weight": 13.7,
         "height": 1.3
     },
-    monster3: {
+    monsters[2]: {
         "name": "Cinder",
         "type": "Ground",
         "weight": 12.9,
         "height": 1.1
     },
-    monster4: {
+    monsters[3]: {
         "name": "Vextaur",
         "type": "Flying",
         "weight": 5.4,
         "height": 0.9
     },
-    monster5: {
+    monsters[4]: {
         "name": "Wazow",
         "type": "Fighting",
         "weight": 1.4,
         "height": 1.0
     },
-    monster6: {
+    monsters[5]: {
         "name": "Swirlip",
         "type": "Fairy",
         "weight": 2.4,
@@ -250,9 +270,9 @@ def menu(creature, img):
             if event.type == QUIT:
                 pygame.quit()
                 quit()
-        for i in range(0, 6, 1):
-            if img == packets[i][0]:
-                screen.blit(packets[i][1], (35, 80))
+        for j in range(0, 6, 1):
+            if img == packets[j][0]:
+                screen.blit(packets[j][1], (35, 80))
         statystyki = font_medium.render("Statystyki:", True, blue_dark)
         screen.blit(statystyki, (600, 20))
         name = font_small.render("Imię zwierzątka:   "+str(creature["name"]), True, blue_dark)
